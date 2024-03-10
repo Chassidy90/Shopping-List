@@ -1,10 +1,9 @@
-const Item = require("../models/Jobs");
+const Item = require("../models/Item.model");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, NotFoundError } = require('../errors');
+const { BadRequestError, NotFoundError } = require("../errors");
 
 const getAllItems = async (req, res) => {
-    const items = await Item.find(
-    );
+    const items = await Item.find();
     res.status(StatusCodes.OK).json({ items, count: items.length });
 };
 
@@ -27,22 +26,24 @@ const createItem = async (req, res) => {
 };
 
 const updateItem = async (req, res) => {
-  const {
-    body: { name, description, price, category, },
-    params: { id: itemId },
-  } = req;
+    const {
+        body: { name, description, price, category },
+        params: { id: itemId },
+    } = req;
 
-  if (name === "" || description === "" || price === "" || category === "") {
-    throw new BadRequestError("name, description, price and category fields cannot be empty");
-  }
-  const item = await Item.findByIdAndUpdate({ _id: itemId }, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!item) {
-    throw new NotFoundError(`No item with id ${itemId}`);
-  }
-  res.status(StatusCodes.OK).json({ item });
+    if (name === "" || description === "" || price === "" || category === "") {
+        throw new BadRequestError(
+            "name, description, price and category fields cannot be empty"
+        );
+    }
+    const item = await Item.findByIdAndUpdate({ _id: itemId }, req.body, {
+        new: true,
+        runValidators: true,
+    });
+    if (!item) {
+        throw new NotFoundError(`No item with id ${itemId}`);
+    }
+    res.status(StatusCodes.OK).json({ item });
 };
 
 const deleteItem = async (req, res) => {
