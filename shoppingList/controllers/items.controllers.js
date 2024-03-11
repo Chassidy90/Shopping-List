@@ -1,6 +1,14 @@
 const Item = require("../models/Item.model");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
+const axios = require ('axios')
+
+
+const getImage = async (req,res) =>{
+    
+}
+
+
 
 const getAllItems = async (req, res) => {
     const items = await Item.find();
