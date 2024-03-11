@@ -1,12 +1,12 @@
-// const Item = require("../models/Jobs");
+const Item = require("../models/Item.model");
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError, NotFoundError } = require('../errors');
+const { BadRequestError, NotFoundError } = require("../errors");
 
 const getAllItems = async (req, res) => {
-    const items = await Item.find(
-    );
+    const items = await Item.find();
     res.status(StatusCodes.OK).json({ items, count: items.length });
 };
+
 const getItem = async (req, res) => {
     const {
         params: { id: itemId },
@@ -19,32 +19,33 @@ const getItem = async (req, res) => {
     }
     res.status(StatusCodes.OK).json({ item });
 };
+
 const createItem = async (req, res) => {
     const item = await Item.create(req.body);
     res.status(StatusCodes.CREATED).json({ item });
 };
-// const updateJob = async (req, res) => {
-//     const {
-//         body: { title, description },
-//         user: { userId },
-//         params: { id: jobId },
-//     } = req;
 
-//     if (title === "" || description === "") {
-//         throw new BadRequestError(
-//             "title and description fields cannot be empty"
-//         );
-//     }
-//     const job = await Job.findByIdAndUpdate(
-//         { _id: jobId, createdBy: userId },
-//         req.body,
-//         { new: true, runValidators: true }
-//     );
-//     if (!job) {
-//         throw new NotFoundError(`No job with id ${jobId}`);
-//     }
-//     res.status(StatusCodes.OK).json({ job });
-// };
+const updateItem = async (req, res) => {
+    const {
+        body: { name, description, price, category },
+        params: { id: itemId },
+    } = req;
+
+    if (name === "" || description === "" || price === "" || category === "") {
+        throw new BadRequestError(
+            "name, description, price and category fields cannot be empty"
+        );
+    }
+    const item = await Item.findByIdAndUpdate({ _id: itemId }, req.body, {
+        new: true,
+        runValidators: true,
+    });
+    if (!item) {
+        throw new NotFoundError(`No item with id ${itemId}`);
+    }
+    res.status(StatusCodes.OK).json({ item });
+};
+
 const deleteItem = async (req, res) => {
     const {
         params: { id: itemId },
@@ -63,6 +64,6 @@ module.exports = {
     getAllItems,
     getItem,
     createItem,
-    // updateItem,
+    updateItem,
     deleteItem,
 };
