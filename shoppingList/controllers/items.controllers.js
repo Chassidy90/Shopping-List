@@ -1,6 +1,25 @@
 const Item = require("../models/Item.model");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
+const axios = require ('axios')
+
+import { createApi } from 'unsplash-js';
+
+unsplash.getPhotos().then(result => {
+    if (result.errors) {
+      console.log('error occurred: ', result.errors[0]);
+    } else {
+      const feed = result.response;
+  
+      const { total, results } = feed;
+  
+     
+      console.log(`received ${results.length} photos out of ${total}`);
+      console.log('first photo: ', results[0]);
+    }
+  });
+
+
 
 const getAllItems = async (req, res) => {
     const items = await Item.find();
