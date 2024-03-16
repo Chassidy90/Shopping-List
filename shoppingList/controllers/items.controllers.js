@@ -1,23 +1,36 @@
 const Item = require("../models/Item.model");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
-const axios = require ('axios')
 
-import { createApi } from 'unsplash-js';
+const { createApi } = require('unsplash-js');
+const ItemModel = require("../models/Item.model");
 
-unsplash.getPhotos().then(result => {
-    if (result.errors) {
-      console.log('error occurred: ', result.errors[0]);
-    } else {
-      const feed = result.response;
-  
-      const { total, results } = feed;
+const unsplashApi = createApi({
+    accessKey:
+    process.env.unsplashAccessKey,
+})
+
+async function createItem(req, res) {
+    try {
+      let item = req.body;
   
      
-      console.log(`received ${results.length} photos out of ${total}`);
-      console.log('first photo: ', results[0]);
+      const response = await api.photos.getRandom({ query: item.name });
+      const randomPhoto = response.data;
+  
+      
+      item.image = randomPhoto.urls.small;
+  
+     
+      const newItem = await Item.create(item);
+  
+      res.status(201).json({ newItem });
+    } catch (error) {
+      console.error('Error creating item:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-  });
+  }
+  
 
 
 
@@ -85,4 +98,5 @@ module.exports = {
     createItem,
     updateItem,
     deleteItem,
+
 };

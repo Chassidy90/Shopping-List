@@ -3,10 +3,7 @@ require("express-async-errors");
 
 
 
-const serverApi = createApi({
-  accessKey: 'lNCjUzHgqcSvlCh3zDRJc1MK1c9BSwYvUThNslVqPj4',
-  
-});
+
 
 
 // const xss = require("xss-clean");
