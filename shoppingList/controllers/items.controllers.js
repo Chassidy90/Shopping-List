@@ -1,14 +1,11 @@
 const Item = require("../models/Item.model");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
-const axios = require ('axios')
+const { createApi } = require("unsplash-js");
 
-
-const getImage = async (req,res) =>{
-    
-}
-
-
+const unsplashApi = createApi({
+    accessKey: process.env.unsplashAccessKey,
+});
 
 const getAllItems = async (req, res) => {
     const items = await Item.find();
@@ -28,10 +25,24 @@ const getItem = async (req, res) => {
     res.status(StatusCodes.OK).json({ item });
 };
 
-const createItem = async (req, res) => {
-    const item = await Item.create(req.body);
-    res.status(StatusCodes.CREATED).json({ item });
-};
+async function createItem(req, res) {
+    try {
+        let item = req.body;
+
+        const randomPhoto = await unsplashApi.photos.getRandom({
+            query: item.name,
+        });
+
+        item.image = randomPhoto.response.urls.small;
+
+        const newItem = await Item.create(item);
+
+        res.status(StatusCodes.CREATED).json({ newItem });
+    } catch (error) {
+        console.error("Error creating item:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
 
 const updateItem = async (req, res) => {
     const {
@@ -44,14 +55,23 @@ const updateItem = async (req, res) => {
             "name, description, price and category fields cannot be empty"
         );
     }
-    const item = await Item.findByIdAndUpdate({ _id: itemId }, req.body, {
+
+    let item = req.body;
+
+    const randomPhoto = await unsplashApi.photos.getRandom({
+        query: item.name,
+    });
+
+    item.image = randomPhoto.response.urls.small;
+
+    const newItem = await Item.findByIdAndUpdate({ _id: itemId }, item, {
         new: true,
         runValidators: true,
     });
-    if (!item) {
+    if (!newItem) {
         throw new NotFoundError(`No item with id ${itemId}`);
     }
-    res.status(StatusCodes.OK).json({ item });
+    res.status(StatusCodes.OK).json({ newItem });
 };
 
 const deleteItem = async (req, res) => {

@@ -7,7 +7,7 @@ const express = require("express");
 const app = express();
 
 const connectDB = require("./db/connect");
-const itemRouter = require("./routes/itemsRoutes.js");
+const itemRouter = require("./routes/itemsRoutes");
 
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
