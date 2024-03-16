@@ -47,25 +47,6 @@ const getItem = async (req, res) => {
     res.status(StatusCodes.OK).json({ item });
 };
 
-async function createItem(req, res) {
-    try {
-        let item = req.body;
-
-        const randomPhoto = await unsplashApi.photos.getRandom({
-            query: item.name,
-        });
-
-        item.image = randomPhoto.response.urls.small;
-
-        const newItem = await Item.create(item);
-
-        res.status(StatusCodes.CREATED).json({ newItem });
-    } catch (error) {
-        console.error("Error creating item:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-}
-
 const updateItem = async (req, res) => {
     const {
         body: { name, description, price, category },
