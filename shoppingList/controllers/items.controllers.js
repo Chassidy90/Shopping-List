@@ -15,16 +15,16 @@ async function createItem(req, res) {
       let item = req.body;
   
      
-      const response = await api.photos.getRandom({ query: item.name });
-      const randomPhoto = response.data;
+      const response = await unsplashApi.photos.getRandom({ query: item.name });
+      
   
       
-      item.image = randomPhoto.urls.small;
+      item.image = randomPhoto.response.urls.small;
   
      
       const newItem = await Item.create(item);
   
-      res.status(201).json({ newItem });
+      res.status(StatusCodes.OK).json({ newItem });
     } catch (error) {
       console.error('Error creating item:', error);
       res.status(500).json({ error: 'Internal server error' });
