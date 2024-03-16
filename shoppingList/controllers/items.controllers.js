@@ -7,6 +7,28 @@ const unsplashApi = createApi({
     accessKey: process.env.unsplashAccessKey,
 });
 
+const { createApi } = require("unsplash-js");
+const ItemModel = require("../models/Item.model");
+
+async function createItem(req, res) {
+    try {
+        let item = req.body;
+
+        const randomPhoto = await unsplashApi.photos.getRandom({
+            query: item.name,
+        });
+
+        item.image = randomPhoto.response.urls.small;
+
+        const newItem = await Item.create(item);
+
+        res.status(StatusCodes.CREATED).json({ newItem });
+    } catch (error) {
+        console.error("Error creating item:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
 const getAllItems = async (req, res) => {
     const items = await Item.find();
     res.status(StatusCodes.OK).json({ items, count: items.length });
