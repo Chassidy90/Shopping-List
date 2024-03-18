@@ -7,7 +7,6 @@ const unsplashApi = createApi({
     accessKey: process.env.unsplashAccessKey,
 });
 
-const { createApi } = require("unsplash-js");
 const ItemModel = require("../models/Item.model");
 
 async function createItem(req, res) {

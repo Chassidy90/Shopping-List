@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ShoppingListItem } from './shopping-list-item';
 import { map } from 'rxjs/operators';
 
+const API_URL = 'http://localhost:5000'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +13,7 @@ export class ShoppingListService {
 
   getShoppingList() {
     return this.http.get(
-      'mongodb+srv://DarkHelmet:Luggage12345@nodeexpressprojects.temhaj9.mongodb.net/shoppingList'
+      `${API_URL}/api/v1/items`
     );
   }
 

@@ -1,0 +1,17 @@
+
+
+<div class="container">
+  <div class="add-item">
+    <input type="text" [(ngModel)]="newItem" placeholder="Enter item name">
+  </div>
+
+  <div class="shopping-list">
+    <div *ngFor="let item of shoppingList">
+      <img [src]="item.imageUrl" alt="Item Image">
+      <span>{{ item.name }}</span>
+      <span>Quantity: {{ item.quantity }}</span>
+      <button (click)="updateItem(item)">Edit</button>
+      <button (click)="deleteItem(item)">Delete</button>
+    </div>
+  </div>
+</div>

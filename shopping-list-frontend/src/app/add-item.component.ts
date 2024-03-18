@@ -7,7 +7,7 @@ import { ShoppingListService } from './shopping-list.service';
   styleUrls: ['./add-item.component.css'],
 })
 export class AddItemComponent implements OnInit {
-  newItem: any = {};
+  newItem: any = '';
   itemImage: string = '';
 
   items: any[] = [];
@@ -28,7 +28,7 @@ export class AddItemComponent implements OnInit {
       .subscribe((addedItem: any) => {
         this.items.push(addedItem);
         this.fetchItemImage(this.newItem.name);
-        this.newItem = {};
+        this.newItem = '';
       });
   }
 
@@ -38,3 +38,4 @@ export class AddItemComponent implements OnInit {
     });
   }
 }
+
